@@ -22,13 +22,13 @@ class AdminController extends Controller
 
     public function verifyUser()
     {
-        $data=[
-            'title' => 'Administracion - Inicio',
+        $data = [
+            'title' => 'Administración - Inicio',
             'menu' => false,
-            'admin'=>true,
-            'data'=>[],
-
+            'admin' => true,
+            'data' => [],
         ];
-        $this->view('admin/index2');
+
+        $this->view('admin/index2', $data);
     }
 }

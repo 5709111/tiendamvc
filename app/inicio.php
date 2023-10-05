@@ -4,6 +4,8 @@ ini_set('display_errors', 1);
 //Constantes iniciales
 define('ROOT', DIRECTORY_SEPARATOR);
 define('APP', ROOT . 'app' . ROOT);
+define('URL', '/var/www/proyecto11');
+define('VIEWS', URL . APP . 'views' . ROOT);
 define('ENCRIPTKEY', 'elperrodesanroque');
 
 
