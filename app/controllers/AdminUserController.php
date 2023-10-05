@@ -11,14 +11,25 @@ class AdminUserController extends Controller
 
     public function index()
     {
-        $data = [
-            'title' => 'Administración de usuarios',
-            'menu' => false,
-            'admin' => true,
-            'data' => [],
-        ];
+        $session = new Session();
 
-        $this->view('admin/users/index', $data);
+        if ($session->getLogin()) {
+
+            $data = [
+                'title' => 'Administración de usuarios',
+                'menu' => false,
+                'admin' => true,
+                'data' => [],
+            ];
+
+            $this->view('admin/users/index', $data);
+
+        } else {
+
+            header('location:' . ROOT . 'admin');
+
+        }
+
     }
 
     public function create()
@@ -55,7 +66,26 @@ class AdminUserController extends Controller
 
             if (count($errors) == 0) {
 
-                //Si no hay errores, BD
+                if ($this->model->createAdminUser($dataForm)) {
+
+                    header('location:' . ROOT . 'adminUser');
+
+                } else {
+
+                    $data = [
+                        'title' => 'Error durante la creación del usuario',
+                        'menu' => false,
+                        'subtitle' => 'Error al crear un nuevo usuario administrador',
+                        'text' => 'Sucedió un error durante la creación de un nuevo administrador',
+                        'color' => 'alert-danger',
+                        'url' => 'adminUser',
+                        'colorButton' => 'btn-danger',
+                        'textButton' => 'Volver',
+                    ];
+
+                    $this->view('mensaje', $data);
+
+                }
 
             } else {
 
