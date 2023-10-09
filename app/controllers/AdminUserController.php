@@ -13,13 +13,15 @@ class AdminUserController extends Controller
     {
         $session = new Session();
 
+        $users = $this->model->getUsers();
+
         if ($session->getLogin()) {
 
             $data = [
                 'title' => 'Administración de usuarios',
                 'menu' => false,
                 'admin' => true,
-                'data' => [],
+                'data' => $users,
             ];
 
             $this->view('admin/users/index', $data);
@@ -113,9 +115,24 @@ class AdminUserController extends Controller
         }
     }
 
-    public function update()
+    public function update($id)
     {
-        echo 'Modificación de usuarios';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            //
+        } else {
+
+            $user = $this->model->getUserById($id);
+
+            $data = [
+                'title' => 'Administración de usuarios - Modificación',
+                'menu' => false,
+                'admin' => true,
+                'data' => $user,
+            ];
+
+            $this->view('admin/users/update', $data);
+        }
+
     }
 
     public function delete()
