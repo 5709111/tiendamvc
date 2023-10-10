@@ -1,5 +1,6 @@
 <?php include_once (VIEWS . 'header.php') ?>
 <script src="<?= ROOT ?>js/adminCreateProduct.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 <?php if(isset($data['errors']) && count($data['errors']) > 0): ?>
     <div class="alert alert-danger mt-3">
         <?php foreach ($data['errors'] as $value): ?>
@@ -188,3 +189,13 @@
     </div>
 </div>
 <?php include_once (VIEWS . 'footer.php') ?>
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( editor => {
+            console.log( editor );
+        } )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
