@@ -1,6 +1,6 @@
 <?php include_once (VIEWS . 'header.php') ?>
-<script src="<?= ROOT ?>js/adminCreateProduct.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
+<script src="<?= ROOT ?>js/adminCreateProduct.js"></script>
 <?php if(isset($data['errors']) && count($data['errors']) > 0): ?>
     <div class="alert alert-danger mt-3">
         <?php foreach ($data['errors'] as $value): ?>
@@ -34,30 +34,27 @@
             </div>
             <div class="form-group text-left mt-4">
                 <label for="name">Descripción:</label>
-                <input type="text" name="description" id="description"
-                       class="form-control" required
-                       placeholder="Escribe una descripción del producto"
-                       value="<?= $data['data']['description'] ?? '' ?>">
+                <textarea name="description" id="editor"></textarea>
             </div>
             <div id="book">
                 <div class="form-group text-left">
                     <label for="author">Autor</label>
                     <input type="text" name="author" id="author"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe el autor del libro"
                            value="<?= $data['data']['author'] ?? '' ?>">
                 </div>
                 <div class="form-group text-left">
                     <label for="publisher">Editorial</label>
                     <input type="text" name="publisher" id="publisher"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe la editorial del libro"
                            value="<?= $data['data']['publisher'] ?? '' ?>">
                 </div>
                 <div class="form-group text-left">
                     <label for="pages">Páginas</label>
                     <input type="text" name="pages" id="pages"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe el número de páginas del libro"
                            value="<?= $data['data']['pages'] ?? '' ?>">
                 </div>
@@ -66,21 +63,21 @@
                 <div class="form-group text-left">
                     <label for="people">Público objetivo</label>
                     <input type="text" name="people" id="people"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe el público objetivo del curso"
                            value="<?= $data['data']['people'] ?? '' ?>">
                 </div>
                 <div class="form-group text-left">
                     <label for="objetives">Objetivos</label>
                     <input type="text" name="objetives" id="objetives"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe los objetivos del curso"
                            value="<?= $data['data']['objetives'] ?? '' ?>">
                 </div>
                 <div class="form-group text-left">
                     <label for="necesites">Conocimientos necesarios previos</label>
                     <input type="text" name="necesites" id="necesites"
-                           class="form-control" required
+                           class="form-control"
                            placeholder="Escribe el número de páginas del libro"
                            value="<?= $data['data']['necesites'] ?? '' ?>">
                 </div>
@@ -177,13 +174,12 @@
                 <input type="checkbox" name="new" id="new"
                        class="form-check-input">
                 <label for="new" class="form-check-label">
-                    <input type="checkbox" name="new" id="new">
                     Producto nuevo
                 </label>
             </div>
             <div class="form-group text-left">
                 <input type="submit" value="Crear producto" class="btn btn-success">
-                <a href="<?= ROOT ?>adminProduct" class="btn btn-info">Regresar</a>
+                <a href="<?= ROOT ?>adminproduct" class="btn btn-info">Regresar</a>
             </div>
         </form>
     </div>
