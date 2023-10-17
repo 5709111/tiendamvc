@@ -16,12 +16,14 @@ class ShopController extends Controller
         if ($session->getLogin()) {
 
             $mostSold = $this->model->getMostSold();
-
+            $news = $this->model->getNews();
             $data = [
                 'title' => 'Bienvenid@ a nuestra exclusiva tienda de productos',
                 'menu' => true,
-                'subtitle' => 'Bienvenid@ a nuestra tienda',
+                'subtitle' => 'Artículos más vendidos',
+                'subtitle2' => 'Artículos nuevos',
                 'data' => $mostSold,
+                'news' => $news,
             ];
 
             $this->view('shop/index', $data);
@@ -37,7 +39,7 @@ class ShopController extends Controller
         header('location:' . ROOT);
     }
 
-    public function show($id)
+    public function show($id, $back = '')
     {
         $product = $this->model->getProductById($id);
 
@@ -46,6 +48,7 @@ class ShopController extends Controller
             'subtitle' => $product->name,
             'menu' => true,
             'admin' => false,
+            'back' => $back,
             'errors' => [],
             'data' => $product,
         ];
