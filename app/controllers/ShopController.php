@@ -14,14 +14,42 @@ class ShopController extends Controller
         $session = new Session();
 
         if ($session->getLogin()) {
+
+            $mostSold = $this->model->getMostSold();
+
             $data = [
                 'title' => 'Bienvenid@ a nuestra exclusiva tienda de productos',
-                'menu' => false,
+                'menu' => true,
+                'subtitle' => 'Bienvenid@ a nuestra tienda',
+                'data' => $mostSold,
             ];
 
             $this->view('shop/index', $data);
         } else {
             header('location:' . ROOT);
         }
+    }
+
+    public function logout()
+    {
+        $session = new Session();
+        $session->logout();
+        header('location:' . ROOT);
+    }
+
+    public function show($id)
+    {
+        $product = $this->model->getProductById($id);
+
+        $data = [
+            'title' => 'Detalle del producto',
+            'subtitle' => $product->name,
+            'menu' => true,
+            'admin' => false,
+            'errors' => [],
+            'data' => $product,
+        ];
+
+        $this->view('shop/show', $data);
     }
 }
