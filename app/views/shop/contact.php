@@ -7,12 +7,13 @@
     </div>
 <?php endif ?>
 
-    <h2 class="text-center"><?= $data['title'] ?></h2>
+    <h2 class="text-center"><?= $data['titulo'] ?></h2>
     <div class="alert mt-3">
         <form action="<?= ROOT ?>shop/contact" method="POST">
             <div class="form-group text-left">
                 <label for="name">Nombre:</label>
-                <input type="text" name="name" id="name" class="form-control" required placeholder="Escriba su nombre">
+                <input type="text" name="name"   value="<?= $data['name'] ?? '' ?>"
+                id="name" class="form-control" required placeholder="Escriba su nombre">
             </div>
             <div class="form-group text-left">
                 <label for="email">Correo electrónico:</label>

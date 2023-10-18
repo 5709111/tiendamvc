@@ -96,7 +96,7 @@ class ShopController extends Controller
             if (count($errors) == 0) {
                 if ( $this->model->sendEmail($name, $email, $message)) {
                     $data = [
-                        'title' => 'Mensaje de usuario',
+                        'titulo' => 'Mensaje de usuario',
                         'menu'	=> true,
                         'errors'=> $errors,
                         'subtitle' => 'Gracias por su mensaje',
@@ -109,7 +109,7 @@ class ShopController extends Controller
                     $this->view('mensaje', $data);
                 } else {
                     $data = [
-                        'title' => 'Error en el envío del correo',
+                        'titulo' => 'Error en el envío del correo',
                         'menu' => true,
                         'errors' => [],
                         'subtitle' => 'Error en el envío del correo',
@@ -123,10 +123,11 @@ class ShopController extends Controller
                 }
             } else {
                 $data = [
-                    'title' => 'Contacta con nosotros',
+                    'titulo' => 'Contacta con nosotros',
                     'menu' => true,
                     'errors' => $errors,
                     'active' => 'contact',
+                    'name'=>$name,
                 ];
                 $this->view('shop/contact', $data);
             }
@@ -137,7 +138,7 @@ class ShopController extends Controller
             if ($session->getLogin()) {
 
                 $data = [
-                    'tittle' => 'Contacta con nosotros',
+                    'titulo' => 'Contacta con nosotros',
                     'menu' => true,
                     'active' => 'contact',
                 ];
