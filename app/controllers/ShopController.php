@@ -41,19 +41,26 @@ class ShopController extends Controller
 
     public function show($id, $back = '')
     {
+
+        $session = new Session();
         $product = $this->model->getProductById($id);
 
-        $data = [
-            'title' => 'Detalle del producto',
-            'subtitle' => $product->name,
-            'menu' => true,
-            'admin' => false,
-            'back' => $back,
-            'errors' => [],
-            'data' => $product,
-        ];
+        if ($session->getLogin()) {
+            $data = [
+                'title' => 'Detalle del producto',
+                'subtitle' => $product->name,
+                'menu' => true,
+                'admin' => false,
+                'back' => $back,
+                'errors' => [],
+                'data' => $product,
+                'user_id'=>$session->getUserId(),
+            ];
 
-        $this->view('shop/show', $data);
+            $this->view('shop/show', $data);
+        } else {
+            header('location:' . ROOT);
+        }
     }
     public function whoami()
     {
