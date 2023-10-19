@@ -71,4 +71,20 @@ class CartController extends Controller
 
         $this->index($errors);
     }
+    public function checkout()
+    {
+        $session = new Session();
+
+        if (! $session->getLogin()) {
+            //
+        } else {
+            $data = [
+                'title' => 'Carrito | Checkout',
+                'subtitle' => 'Checkout | Iniciar sesion',
+                'menu' => true
+            ];
+
+            $this->view('carts/checkout', $data);
+        }
+    }
 }
