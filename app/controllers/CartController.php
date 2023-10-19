@@ -43,4 +43,22 @@ class CartController extends Controller
         }
         $this->index($errors);
     }
+
+    public function update()
+    {
+        if (isset($_POST['rows']) && isset($_POST['user_id'])) {
+            $errors = [];
+            $rows = $_POST['rows'];
+            $user_id = $_POST['user_id'];
+
+            for ($i = 0; $i < $rows; $i++) {
+                $product_id = $_POST['i'.$i];
+                $quantity = $_POST['c'.$i];
+                if ( ! $this->model->update($user_id, $product_id, $quantity) ) {
+                    array_push($errors, 'Error al actualizar el producto');
+                }
+            }
+            $this->index($errors);
+        }
+    }
 }
