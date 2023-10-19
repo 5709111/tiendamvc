@@ -61,4 +61,14 @@ class CartController extends Controller
             $this->index($errors);
         }
     }
+    public function delete($product, $user)
+    {
+        $errors = [];
+
+        if( ! $this->model->delete($product, $user)) {
+            array_push($errors, 'Error al borrar el registro del carrito');
+        }
+
+        $this->index($errors);
+    }
 }
