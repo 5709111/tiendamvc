@@ -13,7 +13,19 @@ class CartController extends Controller
         $session = new Session();
 
         if ($session->getLogin()) {
-echo 'asdf';
+
+            $user_id = $session->getUserId();
+            $cart = $this->model->getCart($user_id);
+
+            $data = [
+                'title' => 'Carrito',
+                'menu' => true,
+                'user_id' => $user_id,
+                'data' => $cart,
+                'errors' => $errors
+            ];
+
+            $this->view('carts/index', $data);
 
         } else {
             header('location:' . ROOT);
