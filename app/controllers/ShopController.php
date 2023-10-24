@@ -17,6 +17,7 @@ class ShopController extends Controller
 
             $mostSold = $this->model->getMostSold();
             $news = $this->model->getNews();
+
             $data = [
                 'title' => 'Bienvenid@ a nuestra exclusiva tienda de productos',
                 'menu' => true,
@@ -41,27 +42,24 @@ class ShopController extends Controller
 
     public function show($id, $back = '')
     {
-
         $session = new Session();
+
         $product = $this->model->getProductById($id);
 
-        if ($session->getLogin()) {
-            $data = [
-                'title' => 'Detalle del producto',
-                'subtitle' => $product->name,
-                'menu' => true,
-                'admin' => false,
-                'back' => $back,
-                'errors' => [],
-                'data' => $product,
-                'user_id'=>$session->getUserId(),
-            ];
+        $data = [
+            'title' => 'Detalle del producto',
+            'subtitle' => $product->name,
+            'menu' => true,
+            'admin' => false,
+            'back' => $back,
+            'errors' => [],
+            'data' => $product,
+            'user_id' => $session->getUserId(),
+        ];
 
-            $this->view('shop/show', $data);
-        } else {
-            header('location:' . ROOT);
-        }
+        $this->view('shop/show', $data);
     }
+
     public function whoami()
     {
         $session = new Session();
@@ -79,11 +77,13 @@ class ShopController extends Controller
             header('location:' . ROOT);
         }
     }
+
     public function contact()
     {
         $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
             $message = $_POST['message'] ?? '';
@@ -100,61 +100,61 @@ class ShopController extends Controller
             if ( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 array_push($errors, 'El correo electrónico no es válido');
             }
+
             if (count($errors) == 0) {
                 if ( $this->model->sendEmail($name, $email, $message)) {
                     $data = [
-                        'titulo' => 'Mensaje de usuario',
-                        'menu'	=> true,
-                        'errors'=> $errors,
+                        'title' => 'Mensaje de usuario',
+                        'menu' => true,
+                        'errors' => $errors,
                         'subtitle' => 'Gracias por su mensaje',
-                        'text'	=> 'En breve recibirá noticias nuestras.',
-                        'color'	=> 'alert-success',
-                        'url'	=> 'shop',
-                        'colorButton'	=> 'btn-success',
-                        'textButton'	=> 'Regresar'
+                        'text' => 'En breve recibirá noticias nuestras',
+                        'color' => 'alert-success',
+                        'url' => 'shop',
+                        'colorButton' => 'btn-success',
+                        'textButton' => 'Regresar',
                     ];
                     $this->view('mensaje', $data);
                 } else {
                     $data = [
-                        'titulo' => 'Error en el envío del correo',
+                        'title' => 'Error en el envió del correo',
                         'menu' => true,
                         'errors' => [],
-                        'subtitle' => 'Error en el envío del correo',
-                        'text' => 'Existió un problema al enviar el correo electrónico. Pruebe por favor más tarde o comuníquese con nuestro servicio de soporte técnico.',
+                        'subtitle' => 'Error en el envió del correo',
+                        'text' => 'Existió un problema durante el proceso de envío del correo electrónico',
                         'color' => 'alert-danger',
                         'url' => 'shop',
                         'colorButton' => 'btn-danger',
-                        'textButton' => 'Regresar'
+                        'textButton' => 'Regresar',
                     ];
                     $this->view('mensaje', $data);
                 }
             } else {
                 $data = [
-                    'titulo' => 'Contacta con nosotros',
+                    'title' => 'Contacta con nosotros',
                     'menu' => true,
                     'errors' => $errors,
                     'active' => 'contact',
-                    'name'=>$name,
                 ];
+
                 $this->view('shop/contact', $data);
             }
         } else {
-
             $session = new Session();
 
             if ($session->getLogin()) {
 
                 $data = [
-                    'titulo' => 'Contacta con nosotros',
+                    'title' => 'Contacta con nosotros',
                     'menu' => true,
                     'active' => 'contact',
                 ];
 
                 $this->view('shop/contact', $data);
+
             } else {
                 header('location:' . ROOT);
             }
-
         }
     }
 }

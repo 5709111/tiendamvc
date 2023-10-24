@@ -4,7 +4,6 @@ class Session
 {
     private $login = false;
     private $user;
-
     private $cartTotal;
 
     public function __construct()
@@ -56,15 +55,13 @@ class Session
 
     public function cartTotal()
     {
-        $db = Mysqldb::getInstance()->getDatabase();
+        $db = MySQLdb::getInstance()->getDatabase();
 
-        $sql = 'SELECT sum(p.price * c.quantity) - sum(c.discount) + sum(c.send) as total
-                FROM carts as c, products as p
-                WHERE c.user_id=:user_id AND c.product_id=p.id AND c.state=0';
+        $sql = 'SELECT sum(p.price * c.quantity) - sum(c.discount) + sum(c.send) as total FROM carts as c, products as p WHERE c.user_id=:user_id AND c.product_id=p.id AND c.state=0';
         $query = $db->prepare($sql);
         $query->execute([':user_id' => $this->getUserId()]);
         $data = $query->fetch(PDO::FETCH_OBJ);
-        unset($db);
+        //$db->close();
 
         return ($data->total ?? 0);
     }

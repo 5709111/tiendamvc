@@ -8,13 +8,15 @@ class CartController extends Controller
     {
         $this->model = $this->model('Cart');
     }
+
     public function index($errors = [])
     {
-        $session = new Session();
+        $session =  new Session();
 
         if ($session->getLogin()) {
 
             $user_id = $session->getUserId();
+
             $cart = $this->model->getCart($user_id);
 
             $data = [
@@ -22,7 +24,7 @@ class CartController extends Controller
                 'menu' => true,
                 'user_id' => $user_id,
                 'data' => $cart,
-                'errors' => $errors
+                'errors' => $errors,
             ];
 
             $this->view('carts/index', $data);
@@ -36,11 +38,12 @@ class CartController extends Controller
     {
         $errors = [];
 
-        if ($this->model->verifyProduct($product_id, $user_id) == false) {
-            if ($this->model->addProduct($product_id, $user_id) == false) {
+        if ( ! $this->model->verifyProduct($product_id, $user_id)) {
+            if ( $this->model->addProduct($product_id, $user_id) == false) {
                 array_push($errors, 'Error al insertar el producto en el carrito');
             }
         }
+
         $this->index($errors);
     }
 
@@ -61,51 +64,51 @@ class CartController extends Controller
             $this->index($errors);
         }
     }
-    public function delete($product, $user)
+
+    public function delete($product_id, $user_id)
     {
         $errors = [];
 
-        if( ! $this->model->delete($product, $user)) {
-            array_push($errors, 'Error al borrar el registro del carrito');
+        if ( ! $this->model->delete($product_id, $user_id)) {
+            array_push($errors, 'Error al borrar el producto del carrito');
         }
-
         $this->index($errors);
     }
+
     public function checkout()
     {
         $session = new Session();
 
-        if ($session->getLogin()) {
+        if ( $session->getLogin()) {
 
             $user = $session->getUser();
 
             $data = [
                 'title' => 'Carrito | Datos de envío',
-                'subtitle' => 'Checkout | Verificar dirección de envío',
+                'subtitle' => 'Carrito | Verificar dirección de envío',
                 'menu' => true,
                 'data' => $user,
             ];
             $this->view('carts/address', $data);
 
-
         } else {
             $data = [
                 'title' => 'Carrito | Checkout',
-                'subtitle' => 'Checkout | Iniciar sesion',
-                'menu' => true
+                'subtitle' => 'Carrito | Iniciar sesión',
+                'menu' => true,
             ];
 
             $this->view('carts/checkout', $data);
         }
     }
+
     public function paymentmode()
     {
         $data = [
             'title' => 'Carrito | Forma de pago',
-            'subtitle' => 'Checkout | Forma de pago',
+            'subtitle' => 'Carrito | Forma de pago',
             'menu' => true,
         ];
-
         $this->view('carts/paymentmode', $data);
     }
 
@@ -125,6 +128,7 @@ class CartController extends Controller
         ];
         $this->view('carts/verify', $data);
     }
+
     public function thanks()
     {
         $session = new Session();

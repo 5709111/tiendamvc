@@ -1,4 +1,3 @@
-
 <?php include_once (VIEWS . 'header.php') ?>
 <div class="card p-4 bg-light">
     <div class="card-header">
