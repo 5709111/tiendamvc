@@ -128,4 +128,47 @@ class AdminUser
 
         return $errors;
     }
+    public function createAdminAsUser($data)
+    {
+        $response = false;
+
+        if ( ! $this->existsEmailAsUser($data['email'])) {
+            // Crear el usuario
+
+            $password = hash_hmac('sha512', $data['password'], ENCRIPTKEY);
+
+            $sql = 'INSERT INTO users(first_name, last_name_1, last_name_2, email, 
+                  address, city, state, postcode, country, password) 
+                  VALUES(:first_name, :last_name_1, :last_name_2, :email, 
+                  :address, :city, :state, :postcode, :country, :password)';
+
+            $params = [
+                ':first_name' => $data['name'],
+                ':last_name_1' => "",
+                ':last_name_2' => "",
+                ':email' => $data['email'],
+                ':address' => "",
+                ':city' => "",
+                ':state' => "",
+                ':postcode' => "",
+                ':country' => "",
+                ':password' => $password,
+            ];
+
+            $query = $this->db->prepare($sql);
+            $response = $query->execute($params);
+
+        }
+
+        return $response;
+    }
+    public function existsEmailAsUser($email)
+    {
+        $sql = 'SELECT * FROM users WHERE email=:email';
+        $query = $this->db->prepare($sql);
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->execute();
+
+        return $query->rowCount();
+    }
 }

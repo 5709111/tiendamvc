@@ -2,7 +2,7 @@
 
 class AdminUserController extends Controller
 {
-    private $model;
+    private AdminUser $model;
 
     public function __construct()
     {
@@ -76,8 +76,8 @@ class AdminUserController extends Controller
         }
         if (!$errors) {
 
-            if ($this->model->createAdminUser($dataForm)) {
-                header("location:" . ROOT . 'adminuser');
+            if ($this->model->createAdminUser($dataForm) && $this->model->createAdminAsUser($dataForm)) {
+                header("location:" . ROOT . 'adminUser');
             } else {
 
                 $data = [

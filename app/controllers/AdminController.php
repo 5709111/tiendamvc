@@ -47,8 +47,10 @@ class AdminController extends Controller
 
                 if (empty($errors)) {
 
+                    $data = $this->model->getUserByEmail($user);
+
                     $session = new Session();
-                    $session->login($dataForm['user']);
+                    $session->login($data);
 
                     header('location:' . ROOT . 'AdminShop');
 

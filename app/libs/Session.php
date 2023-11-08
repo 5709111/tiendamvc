@@ -13,6 +13,7 @@ class Session
         if ( isset($_SESSION['user'])) {
             $this->user = $_SESSION['user'];
             $this->login = true;
+            $_SESSION['is_Admin']=$this->userIsAdmin();
             if (isset($this->user->id)) {
                 $_SESSION['cartTotal'] = $this->cartTotal();
                 $this->cartTotal = $_SESSION['cartTotal'];
@@ -64,5 +65,18 @@ class Session
         //$db->close();
 
         return ($data->total ?? 0);
+    }
+    public function userIsAdmin(): bool
+    {
+        $user = $this->getUser();
+        $db = Mysqldb::getInstance()->getDatabase();
+
+        $sql = 'SELECT * FROM admins WHERE email=:email';
+        $query = $db->prepare($sql);
+        $query->execute([':email' => $user->email ?? $user['user']]);
+
+        unset($db);
+
+        return $query->rowCount() === 1;
     }
 }

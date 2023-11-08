@@ -75,6 +75,14 @@
                 </li>
             </ul>
         <?php endif; ?>
+        <?php if(isset($_SESSION['is_Admin']) && $_SESSION['is_Admin']): ?>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a href="<?= ROOT ?>adminShop" class="nav-link">Panel de administracion</a>
+                </li>
+
+            </ul>
+        <?php endif; ?>
     </div>
 </nav>
 <div class="container-fluid">
