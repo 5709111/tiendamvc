@@ -50,7 +50,7 @@ class Session
 
     public function getUserId()
     {
-        return $this->user->id;
+        return $this->user->id ?? null;
     }
 
     public function cartTotal()
