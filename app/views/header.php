@@ -65,6 +65,9 @@
                 <li class="nav-item">
                     <a href="<?= ROOT ?>adminCarts/sales" class="nav-link">Ventas</a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= ROOT ?>admin/logout" class="nav-link">Logout</a>
+                </li>
             </ul>
         <?php endif; ?>
     </div>

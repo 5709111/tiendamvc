@@ -66,4 +66,10 @@ class AdminController extends Controller
 
         $this->view('admin/index', $data);
     }
+    public function logout()
+    {
+        $session = new Session();
+        $session->logout();
+        header('location:' . ROOT . "Admin");
+    }
 }
