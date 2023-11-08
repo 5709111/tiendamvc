@@ -77,4 +77,12 @@ class Validate
 
         return $string;
     }
+    public static function  cut($description,$value)
+    {
+        $cadena=html_entity_decode($description);
+        if (strlen($cadena)>$value){
+            $cadena=substr($cadena,0,$value). '...';
+        }
+        return $cadena;
+    }
 }

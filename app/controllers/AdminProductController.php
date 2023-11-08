@@ -15,6 +15,9 @@ class AdminProductController extends Controller
 
         if ($session->getLogin()) {
             $products = $this->model->getProducts();
+            foreach ($products as $p){
+                $p->description=Validate::cut($p->description,30);
+            }
             $type = $this->model->getConfig('productType');
 
             $data = [
