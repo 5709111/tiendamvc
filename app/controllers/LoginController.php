@@ -329,15 +329,16 @@ class LoginController extends Controller
         $user = $_POST['user'] ?? '';
         $password = $_POST['password'] ?? '';
         $remember = $_POST['remember'] ?? '';
+        $pass = hash_hmac('sha512', $password, ENCRIPTKEY);
 
-        $value = $user . '|' . $password;
+        $value = $user . '|' . $pass;
         if ($remember == 'on') {
             $date = time() + (60*60*24*7);
         } else {
             $date = time() - 1;
         }
 
-        setcookie('shoplogin', $value, $date, dirname(__DIR__) . ROOT);
+        setcookie('shoplogin', $value, $date, dirname(__DIR__) . ROOT.'/');
 
         $errors = $this->model->verifyUser($user, $password);
 
