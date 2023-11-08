@@ -34,92 +34,90 @@ class AdminUserController extends Controller
 
     }
 
-    public function create()
+    public function create($dataform= [],$errors=[])
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $data = [
+            'title' => 'Administración de Usuarios - Alta',
+            'menu' => false,
+            'admin' => true,
+            'data' => $dataform,
+            'errors'=>$errors
+        ];
+        $this->view('admin/users/create', $data);
+    }
+    public function store()
+    {
 
-            $errors = [];
-            $name = $_POST['name'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $password1 = $_POST['password1'] ?? '';
-            $password2 = $_POST['password2'] ?? '';
+        $errors = [];
 
-            $dataForm = [
-                'name' => $name,
-                'email' => $email,
-                'password' => $password1,
-            ];
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password1 = $_POST['password1'] ?? '';
+        $password2 = $_POST['password2'] ?? '';
+        $dataForm = [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password1,
+        ];
+        if (empty($name)) {
+            array_push($errors, 'El nombre de usuario es requerido');
+        }
+        if (empty($email)) {
+            array_push($errors, 'El correo electrónico de usuario es requerido');
+        }
+        if (empty($password1)) {
+            array_push($errors, 'La clave de acceso es requerida');
+        }
+        if (empty($password2)) {
+            array_push($errors, 'La verificación de clave es requerida');
+        }
+        if ($password1 != $password2) {
+            array_push($errors, 'Las claves no coinciden');
+        }
+        if (!$errors) {
 
-            if (empty($name)) {
-                array_push($errors, 'El nombre es requerido');
-            }
-            if (empty($email)) {
-                array_push($errors, 'El correo electrónico es requerido');
-            }
-            if (empty($password1)) {
-                array_push($errors, 'La contraseña es requerida');
-            }
-            if (empty($password2)) {
-                array_push($errors, 'Repetir la contraseña es requerida');
-            }
-            if ($password1 != $password2) {
-                array_push($errors, 'Las contraseñas deben ser iguales');
-            }
-
-            if (count($errors) == 0) {
-
-                if ($this->model->createAdminUser($dataForm)) {
-
-                    header('location:' . ROOT . 'adminUser');
-
-                } else {
-
-                    $data = [
-                        'title' => 'Error durante la creación del usuario',
-                        'menu' => false,
-                        'subtitle' => 'Error al crear un nuevo usuario administrador',
-                        'text' => 'Sucedió un error durante la creación de un nuevo administrador',
-                        'color' => 'alert-danger',
-                        'url' => 'adminUser',
-                        'colorButton' => 'btn-danger',
-                        'textButton' => 'Volver',
-                    ];
-
-                    $this->view('mensaje', $data);
-
-                }
-
+            if ($this->model->createAdminUser($dataForm)) {
+                header("location:" . ROOT . 'adminuser');
             } else {
 
                 $data = [
-                    'title' => 'Administración de usuarios - Alta',
+                    'title' => 'Error en la creación de un usuario administrador',
                     'menu' => false,
-                    'admin' => true,
-                    'errors' => $errors,
-                    'data' => $dataForm,
+                    'errors' => [],
+                    'subtitle' => 'Error al crear un nuevo usuario administrador',
+                    'text' => 'Se ha producido un error durante el proceso de creación de un usuario administrador',
+                    'color' => 'alert-danger',
+                    'url' => 'adminUser',
+                    'colorButton' => 'btn-danger',
+                    'textButton' => 'Volver',
                 ];
-
-                $this->view('admin/users/create', $data);
+                $this->view('mensaje', $data);
             }
+
         } else {
-
-            $data = [
-                'title' => 'Administración de usuarios - Alta',
-                'menu' => false,
-                'admin' => true,
-                'data' => [],
-            ];
-
-            $this->view('admin/users/create', $data);
-
+            $this->create($dataForm, $errors);
         }
     }
+
+    public function edit($id,$errors=[])
+    {
+        $user = $this->model->getUserById($id);
+        $status = $this->model->getConfig('adminStatus');
+        $data = [
+            'title' => 'Administración de Usuarios - Editar',
+            'menu' => false,
+            'admin' => true,
+            'data' => $user,
+            'status' => $status,
+            'errors' => $errors,
+        ];
+        $this->view('admin/users/update', $data);
+    }
+
 
     public function update($id)
     {
         $errors = [];
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
@@ -156,22 +154,10 @@ class AdminUserController extends Controller
                 if (empty($errors)) {
                     header('location:' . ROOT . 'adminUser');
                 }
+            }else{
+                $this->edit($id,$errors);
             }
-        }
 
-        $user = $this->model->getUserById($id);
-        $status = $this->model->getConfig('adminStatus');
-
-        $data = [
-            'title' => 'Administración de usuarios - Modificación',
-            'menu' => false,
-            'admin' => true,
-            'errors' => $errors,
-            'status' => $status,
-            'data' => $user,
-        ];
-
-        $this->view('admin/users/update', $data);
 
     }
 
@@ -179,25 +165,30 @@ class AdminUserController extends Controller
     {
         $errors = [];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $errors = $this->model->delete($id);
-
-            if (empty($errors)) {
-                header('location:' . ROOT . 'adminUser');
-            }
-        }
 
         $user = $this->model->getUserById($id);
         $status = $this->model->getConfig('adminStatus');
+
         $data = [
-            'title' => 'Administración de usuarios - Eliminación',
+            'title' => 'Administración de Usuarios - Eliminación',
             'menu' => false,
             'admin' => true,
-            'errors' => $errors,
-            'status' => $status,
             'data' => $user,
+            'status' => $status,
+            'errors' => $errors,
         ];
 
         $this->view('admin/users/delete', $data);
+    }
+    public function destroy($id)
+    {
+
+        $errors = $this->model->delete($id);
+
+        if ( ! $errors ) {
+            header('location:' . ROOT . 'adminUser');
+        }
+
+
     }
 }
